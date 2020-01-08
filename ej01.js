@@ -7,7 +7,8 @@
 // USAR LA LISTA DE TODOS
 
 //01 
-let list;
+let list = []
+
 const getTodos = () =>{
     axios.get("https://jsonplaceholder.typicode.com/todos")
     .then(res => {
@@ -25,32 +26,43 @@ const getTodo = (id) =>{
         usuario = res.data;
     })
     .catch(err => console.log(err));
+
+
 }
 
 //03
 let usuarioNuevo;
-const newTodo = (id,titulo,body,user) =>{
-    axios.post(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+const newTodo = (user, titulo) =>{
+    //no hace falta poner el parametro del ID porque no es responsabilidad del frontend decir que numero de ID es, se crea automatico
+    axios.post(`https://jsonplaceholder.typicode.com/todos`, {
+        userId: user,
         title: titulo,
-        body: body,
-        userId: user
+        completed: false
     })
     .then(res => {
         usuarioNuevo = res.data;
+        //aca estas agregando el usuario nuevo al array list
+        list.push(usuarioNuevo)
     })
     .catch(err => {throw err;});
 }
 
 //04
 let usuarioMod;
-const updateTodo = (id, titulo, body,user) =>{
+const updateTodo = (user, id, titulo,completed) =>{
     axios.put(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+        userId: user,
+        id: id,
         title: titulo,
-        body: body,
-        userId: user
+        completed: completed
     })
     .then(res => {
         usuarioMod = res.data
+        for(let i=0; i<list.length; i++){
+            if(list[i].id==id){
+                list[i]=red.data
+            }
+        }
     })
     .catch(err => {throw err;});
 }
@@ -61,6 +73,21 @@ const deleteTodo = (id) => {
     axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
     .then(res => {
         usuarioBorradoS = res.data
+        const index = usuarioNuevo.findIndex(usuarioNuevo =>{
+            return list.id == id;
+        });
+        list.splice(index,1);
     })
     .catch(err => {throw err;});
 }
+
+////////////////////
+
+// HACER UNA FUNCION QUE AGARRE LOS DATOS Y LOS MUESTRE, LOS 200 DATOS
+
+const mostrarLista = () =>{
+    let lista = document.querySelector("#todo-list");
+//crear cada elemento, cada span y los botones
+// vincular cada elemtno
+//esta funcion se llama desde dentro de la funcion de getTodos!!!!!!!
+document.createElement
