@@ -33,8 +33,8 @@ const mostrarLista = () =>{
         li.className = "todo-item";
         //otra forma de poner la clase
         title.setAttribute("class","todo-title");
-        //creamos otro titulo
-        const titleText = document.createElement(todo.title);
+        //creamos un nodo de texto, agregando texto al span
+        const titleText = document.createTextNode(todo.title);
 
         //vinculamos cada elemento
         title.appendChild(titleText);
@@ -51,10 +51,13 @@ const mostrarLista = () =>{
     }
 
     getTodos().then(mostrarLista);
-    
-// vincular cada elemtno
-//esta funcion se llama desde dentro de la funcion de getTodos!!!!!!!
-
+    /*
+    Se hace con .then es porque 
+    la primera función devuelve una promesa, 
+    entonces el then es para que la segunda 
+    sepa que debe esperar que se cumpla 
+    la promesa para ejecutarse
+    */
 
 
 //02
