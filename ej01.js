@@ -9,23 +9,37 @@
 //01 
 let list = []
 
-const getTodos = () =>{
-    axios.get("https://jsonplaceholder.typicode.com/todos")
-    .then(res => {
-        list = res.data;
-    })
-    .catch(err => console.log(err));
+const getTodos = async () =>{
+    try{
+        const res = await axios.get("https://jsonplaceholder.typicode.com/todos");
+        //el console.log es a modo ejem
+        list=res.data;
+        //la funcion de abajo invocada aca!
+        mostrarLista();
+    } catch (err){
+        err =>{
+            alert(`Hubo un error. ${err}`);
+        }
+    }
 }
+    
+   // .then(res => {
+     //   list = res.data;
+    //})
+    //.catch(err => console.log(err));
+//}
 
 // HACER UNA FUNCION QUE AGARRE LOS DATOS Y LOS MUESTRE, LOS 200 DATOS
 
 const mostrarLista = () =>{
     const ul = document.querySelector("#todo-list");
+    //reinicia la lista, sino cada vez que estuviesemos poniendo algo nuevo se imprimiria abajo de vuelta
+    ul.innerHTML=""
     //crear cada elemento, cada span y los botones
     //se usa un bucle para que se cree por cada item de la lista
     for(let todo of list){
         const li = document.createElement("li");
-        const title = document.createElement("span");
+        const title = document.createElement("span");  
         const eliminar = document.createElement("button");
         // crear lo que dice adentro del boton
         eliminar.innerText = "Eliminar";
@@ -42,15 +56,17 @@ const mostrarLista = () =>{
 
         //agregamos un evento al boton de eliminar
         eliminar.addEventListener("click", ()=>{
-            deleteTodo(todo.id).then(mostrarLista)
+            deleteTodo(todo.id);
         });
 
         //vinculamos
         li.appendChild(title);
         ul.appendChild(li);
     }
+}
+    getTodos();
 
-    getTodos().then(mostrarLista);
+    //getTodos().then(mostrarLista);
     /*
     Se hace con .then es porque 
     la primera función devuelve una promesa, 
@@ -63,13 +79,20 @@ const mostrarLista = () =>{
 //02
 
 let usuario;
-const getTodo = (id) =>{
-    axios.get(`https://jsonplaceholder.typicode.com/todos/${id}`)
-    .then(res => {
-        usuario = res.data;
-    })
-    .catch(err => console.log(err));
-}
+const getTodo = async (id) =>{
+    try{
+        const data = await axios.get(`https://jsonplaceholder.typicode.com/todos/${id}`);
+        usuario=data
+    } catch (err){
+        console.log(err);
+        }
+    console.log("termino fetch async/await")
+
+}  
+    //.then(res => {
+    //    usuario = res.data;
+    //})
+  
 
 //03
 let usuarioNuevo;
@@ -105,7 +128,7 @@ const updateTodo = (user, id, titulo,completed) =>{
             }
         }
     })
-    .catch(err => {throw err;});
+    .catch(err => {throw err});
 }
 
 //05
@@ -119,5 +142,5 @@ const deleteTodo = (id) => {
         });
         list.splice(index,1);
     })
-    .catch(err => {throw err;});
-}}
+    .catch(err => {throw err});
+}
